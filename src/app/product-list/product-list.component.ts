@@ -148,29 +148,28 @@ export class ProductListComponent {
       //checks the dates for the stock
       var days = 4;
       this.volumeaverage[this.volumeaverage.length - 1] = 0;
-      for (var i = 0; i < days; i++) {
+      var volumeA = 0;
+      for (var j = 0; j < days; j++) {
         try {
           //this.getDate(i);
           var volume1 = this.temp['data'][i]['volume'];
           console.log('volume1 is ' + volume1);
-          this.volumeaverage[this.volumeaverage.length] =
-            this.volumeaverage[this.volumeaverage.length] + volume1;
-          console.log(this.volumeaverage);
+          volumeA = volumeA + volume1;
           this.volume.push(volume1);
-          console.log(this.volume);
+          console.log('volume is ' + this.volume);
         } catch (err) {
           console.log(this.currentDate + 'failure');
         }
       }
       //puts the number of volume average in an array for the particular stock
-      this.volumeaverage.push(
-        this.volumeaverage[this.volumeaverage.length - 1] / this.volume.length
-      );
+      this.volumeaverage.push(0);
+      this.volumeaverage[i] = volumeA / this.volume.length;
       console.log(
         'volume average is ' + this.volumeaverage[this.volumeaverage.length - 1]
       );
       //console.log(volume1);
     }
+    console.log(this.volumeaverage);
   }
   getPrice() {
     var price = [];
@@ -183,9 +182,9 @@ export class ProductListComponent {
       this.priceaverage = [0];
       //gets data from the url for the ticker
       var url1 =
-        'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=' +
+        'https://api.marketstack.com/v1/eod?access_key=6158cebbbad397e037e6807f887a3a67&symbols=' +
         this.tickers[i] +
-        '&apikey=LTUI6TBDUNDHQYEG';
+        '&date_from=2023-03-26&date_to=2023-03-30';
 
       this.http.get(url1).subscribe((data: any[]) => {
         this.temp = data;
