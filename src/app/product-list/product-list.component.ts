@@ -129,7 +129,7 @@ export class ProductListComponent {
   test = [];
   count: any[];
   getVolume() {
-    this.volumeaverage = [0];
+    this.volumeaverage = [];
     this.count = [];
     this.volume = [];
     //gets data for the tickers and put them in an array
@@ -147,7 +147,7 @@ export class ProductListComponent {
       console.log(this.temp);
       //checks the dates for the stock
       var days = 4;
-      this.volumeaverage[this.volumeaverage.length - 1] = 0;
+      //this.volumeaverage[i] = 0;
       var volumeA = 0;
       for (var j = 0; j < days; j++) {
         try {
@@ -173,7 +173,7 @@ export class ProductListComponent {
   }
   getPrice() {
     var price = [];
-    this.priceaverage = [0];
+    this.priceaverage = [];
     var count = 0;
     //gets data for the individual stock
     for (var i = 0; i < this.tickers.length; i++) {
@@ -193,7 +193,11 @@ export class ProductListComponent {
       price = [[]];
       var count1 = 0;
       //checks the dates for the prices to find a counter balance
-      for (i = 0; i < 7; i++) {
+      var days = 4;
+      this.volumeaverage[this.volumeaverage.length - 1] = 0;
+      var priceopenA = 0;
+      var pricecloseA = 0;
+      for (var j = 0; j < days; j++) {
         try {
           console.log('success');
           this.getDate(i);
