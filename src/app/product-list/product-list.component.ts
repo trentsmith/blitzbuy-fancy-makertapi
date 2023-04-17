@@ -179,7 +179,7 @@ export class ProductListComponent {
     for (var i = 0; i < this.tickers.length; i++) {
       //pushes empty array for the ticker's use
       price.push([]);
-      this.priceaverage = [0];
+      this.priceaverage = [];
       //gets data from the url for the ticker
       var url1 =
         'https://api.marketstack.com/v1/eod?access_key=6158cebbbad397e037e6807f887a3a67&symbols=' +
@@ -200,12 +200,10 @@ export class ProductListComponent {
       for (var j = 0; j < days; j++) {
         try {
           console.log('success');
-          this.getDate(i);
           var open = this.temp['data'][i]['open'];
           var close = this.temp['data'][i]['close'];
           console.log('test');
-          this.priceaverage[count] = this.priceaverage[count] + close;
-          console.log('test');
+          this.priceaverage[i] = this.priceaverage[i] + close + open;
           //puts the price into the open and close
           price[count].push(open);
           price[count].push(close);
@@ -216,7 +214,7 @@ export class ProductListComponent {
           console.log(err);
         }
       }
-      this.priceaverage[count] = this.priceaverage[count] / this.price.length;
+      this.priceaverage[i] = this.priceaverage[i] / this.price.length;
       count++;
     }
     this.price = price;
