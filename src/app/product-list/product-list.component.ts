@@ -194,14 +194,13 @@ export class ProductListComponent {
       var count1 = 0;
       //checks the dates for the prices to find a counter balance
       var days = 4;
-      this.volumeaverage[this.volumeaverage.length - 1] = 0;
       var priceopenA = 0;
       var pricecloseA = 0;
       for (var j = 0; j < days; j++) {
         try {
           console.log('success');
-          var open = this.temp['data'][i]['open'];
-          var close = this.temp['data'][i]['close'];
+          var open = this.temp['data'][j]['open'];
+          var close = this.temp['data'][j]['close'];
           console.log('test');
           this.priceaverage[i] = this.priceaverage[i] + close + open;
           //puts the price into the open and close
