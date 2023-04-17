@@ -234,9 +234,9 @@ export class ProductListComponent {
       var trycatch = 0;
       this.count.push(0);
       var url1 =
-        'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=' +
+        'https://api.marketstack.com/v1/eod?access_key=6158cebbbad397e037e6807f887a3a67&symbols=' +
         this.tickers[i] +
-        '&apikey=LTUI6TBDUNDHQYEG';
+        '&date_from=2023-03-26&date_to=2023-03-30';
       //note this one will fix it.
       var offsetdate = 1;
       this.http.get(url1).subscribe((data: any[]) => {
