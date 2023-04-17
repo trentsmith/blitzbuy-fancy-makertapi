@@ -1,0 +1,248 @@
+<!-- Latest compiled and minified CSS -->
+<style>
+  p {
+    font-family: Lato;
+  }
+
+  .jumbotron {
+    background-color: rgb(125, 187, 31);
+  }
+
+  .table {
+    background-color: white;
+  }
+
+  div.jumbotron {
+    padding: -200px -100px -140px --100px;
+  }
+
+  .btn-block {
+    background-color: red;
+  }
+
+  .btn {
+    background-color: white;
+  }
+
+  .sector-button {
+    background-color: rgb(125, 187, 31);
+    color: white;
+  }
+</style>
+<script src="https://checkout.stripe.com/checkout.js"></script>
+<link
+  rel="stylesheet"
+  href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+  integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu"
+  crossorigin="anonymous"
+/>
+
+<!-- Optional theme -->
+<link
+  rel="stylesheet"
+  href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css"
+  integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ"
+  crossorigin="anonymous"
+/>
+
+<!-- Latest compiled and minified JavaScript -->
+<script
+  src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
+  integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd"
+  crossorigin="anonymous"
+></script>
+
+<div>
+  <h2>Add a Stock</h2>
+  <h3>Stock</h3>
+  <input
+    type="text"
+    class="form-control"
+    ng-model="string"
+    (keyup)="onstockKeyUp($event)"
+    [name]="stock"
+  />
+  <br />
+
+  <button (click)="gettickersymbols()" class="btn">add</button>
+  <button (click)="deleteTickersymbols()" class="btn">delete</button>
+  <br />
+
+  <br />
+  <table style="width:100%" class="table">
+    <thead>
+      <tr>
+        <th scope="col">Stock</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let ticker of tickers">
+        <td scope="col" (click)="deleteTickersymbolsonclick(ticker)">
+          {{ ticker }}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <!--<input type ="text" class="form-control" ng-model="string" (keyup)="onstockKeyUp($event)" [name]="stock">-->
+  <div *ngFor="let ticker of tickers">
+    <br />
+    <h2>{{ ticker }}</h2>
+    <!--<button class="btn" >tech</button>
+<button class="btn" >food</button>
+<button class="btn" (click) = "getSector($event)">Business</button>
+{{test}}-->
+    <h3>Sector</h3>
+
+    <p>
+      <!-- Healthcare,Tech,Energy,Utilities,Consumer Discretionary,Consumer
+      Staples,Telecom,Materials,Industrials, Real Estate, Financials are the
+      sectors you can choose from.-->
+      <button
+        class="sector-button"
+        (click)="onsectorkKeyUp('Healthcare', ticker)"
+      >
+        Healthcare
+      </button>
+      <button class="sector-button" (click)="onsectorkKeyUp('Tech', ticker)">
+        Tech</button
+      ><button class="sector-button" (click)="onsectorkKeyUp('Energy', ticker)">
+        Energy</button
+      ><button
+        class="sector-button"
+        (click)="onsectorkKeyUp('Utilities', ticker)"
+      >
+        Utilities</button
+      ><button
+        class="sector-button"
+        (click)="onsectorkKeyUp('Consumer Discretionary', ticker)"
+      >
+        Consumer Staples</button
+      ><button
+        class="sector-button"
+        (click)="onsectorkKeyUp('Consumer Staples', ticker)"
+      >
+        Consumer Staples
+      </button>
+      <button class="sector-button" (click)="onsectorkKeyUp('Telecom', ticker)">
+        Telecom
+      </button>
+      <button
+        class="sector-button"
+        (click)="onsectorkKeyUp('Materials', ticker)"
+      >
+        Materials
+      </button>
+      <button
+        class="sector-button"
+        (click)="onsectorkKeyUp('Industrials', ticker)"
+      >
+        Industrials
+      </button>
+      <button
+        class="sector-button"
+        (click)="onsectorkKeyUp('Real Estate', ticker)"
+      >
+        Real Estate
+      </button>
+      <button
+        class="sector-button"
+        (click)="onsectorkKeyUp('Financials', ticker)"
+      >
+        Financials
+      </button>
+    </p>
+
+    <!--  <h4>Other stocks in this field</h4>
+    {{this.tickerssectors[0]}}
+    <input (keyup)="onsectorkKeyUp($event,ticker)" class="form-control" />
+    <button class="btn" (click)="getSector(ticker)">Get Info</button>
+    <br />-->
+  </div>
+  <br />
+  <table style="width:100%" class="table">
+    <thead>
+      <tr>
+        <th scope="col">Stock</th>
+        <th scope="col">BuyorSell</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let buy of buyorsell">
+        <td scope="col">{{ buy[0] }}</td>
+        <td scope="col" *ngIf="buy[1] == 0">Sell</td>
+        <td scope="col" *ngIf="buy[1] == 1">Buy</td>
+        <td scope="col" *ngIf="buy[1] == 2">Hold</td>
+
+        <!-- <td scope="col" > {{buy[1]}} </td>-->
+      </tr>
+    </tbody>
+  </table>
+  <button (click)="getbuyorsell()" class="btn">Calculate</button>
+  <button (click)="getVolume()" class="btn">Test</button>
+
+  <br />
+</div>
+<div class="container" *ngIf="fee">
+  <div class="container mt-5">
+    <!-- <h2>Stripe Checkout</h2>-->
+  </div>
+</div>
+
+<div *ngIf="reg">
+  Username:
+  <br />
+  <input
+    type="text"
+    class="form-control"
+    ng-model="string"
+    (keyup)="onUsernameRegKeyUp($event)"
+  />
+  Password:
+  <br />
+  <br />
+
+  <input
+    type="text"
+    class="form-control"
+    ng-model="string"
+    (keyup)="onPasswordregKeyUp($event)"
+  />
+  <button (click)="feepay()" class="form-control">Submit</button>
+</div>
+<!--<div *ngIf="showmanuel">
+  <div class = "container">
+<div class ="jumbotron">
+<h3>Stock</h3>
+<input class = "form-control" ng-model="string" (keyup)="onstockKeyUp($event)">
+<h3>open</h3>
+<input class = "form-control" (keyup) = "onbuyKeyUp($event)">
+<h3>close</h3>
+<input class = "form-control" (keyup) = "onsellKeyUp($event)">
+<br>
+<button class="btn" (click)="GetManuelInformation()">add</button>
+<button class="btn">$$$$$$$$</button>
+<br>
+<br>
+<table style="width:100%" class="table" *ngIf="show;" > 
+  <thead>
+    <tr>` 
+      <th scope="col">Stock</th>
+            <th scope="col">open</th>
+      <th scope="col">close</th>
+
+    </tr>
+  </thead>
+   <tbody>
+    <tr *ngFor="let info of manuelInformation" >
+
+      <td scope="col" (click)="deleteTickersymbolsonclick(ticker)"> {{info[0]}} </td>
+           <td scope="col" (click)="deleteTickersymbolsonclick(ticker)"> {{info[1]}} </td>
+      <td scope="col" (click)="deleteTickersymbolsonclick(ticker)"> {{info[2]}} </td>
+
+
+    </tr>
+  </tbody>
+  </table>
+</div>
+  </div>
+</div>-->
