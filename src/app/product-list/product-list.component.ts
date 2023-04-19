@@ -229,7 +229,7 @@ export class ProductListComponent {
   getbuyorsellnew() {
     var buyorsell = [];
     var today = this.currentDate(0);
-    var firstday = this.currentDate(10);
+    var firstdayoffset = this.currentDate(10);
     var url1 =
       'https://api.marketstack.com/v1/eod?access_key=6158cebbbad397e037e6807f887a3a67&symbols=' +
       this.tickers[i] +
@@ -238,11 +238,125 @@ export class ProductListComponent {
     this.http.get(url1).subscribe((data: any[]) => {
       this.temp = data;
     });
-
+    var maxhigh = this.temp['data'][0]['high'];
     var minlow = this.temp['data'][0]['low'];
     var maxvolume = this.temp['data'][0]['volume'];
     var minvolume = this.temp['data'][0]['volume'];
-    for (var i = 0; i < this.tickers.length; i++) {}
+    //loops through tickers
+    for (var i = 0; i < this.tickers.length; i++) {
+      //loops through the days
+      for (var j = 0; j < this.temp['data'].length; j++) {
+        var high = this.temp['data'][j]['high'];
+        var low = this.temp['data'][j]['low'];
+        var volume = this.temp['data'][j]['volume'];
+
+        if (high > maxhigh) {
+          maxhigh = high;
+        }
+        if (low < minlow) {
+          minlow = low;
+        }
+        if (volume > maxvolume) {
+          maxvolume = volume;
+        }
+        if (volume < minvolume) {
+          minvolume = volume;
+        }
+      }
+      //calculations high price and volume
+      var hml = maxhigh - minlow;
+      var hvl = maxvolume - minvolume;
+      //array of the prices for references
+      var lowhighprice = [
+        minlow,
+        minlow + hml * 0.25,
+        minlow + hml * 0.5,
+        minlow + hml * 0.75,
+        maxhigh,
+      ];
+      var lowhighvolume = [
+        minvolume,
+        minvolume + hvl * 0.25,
+        minvolume + hvl * 0.5,
+        minvolume + hvl * 0.75,
+        maxvolume,
+      ];
+    }
+
+    var p;
+    var v;
+    var open = this.temp['data'][0]['open'];
+    var volume1 = this.temp['data'][0]['volume'];
+    for (var m = 0; m < lowhighprice.length - 1; m++) {
+      console.log(m + ' ' + lowhighprice[m]);
+      console.log(open);
+      if (lowhighvolume[m] < volume1) {
+        if (m == 0) {
+          v = m;
+        }
+        if (lowhighvolume[m + 1] >= volume1) {
+          v = m;
+        }
+        if (lowhighvolume[m + 1] < volume1) {
+          v = 100;
+        }
+      }
+      if (lowhighprice[m] < open) {
+        console.log(lowhighprice);
+        console.log(open);
+        if (m == 0) {
+          p = m;
+        }
+        if (lowhighprice[m + 1] >= open) {
+          p = m;
+        }
+        if (lowhighprice[m + 1] < open) {
+          p = 100;
+        }
+      }
+    }
+    var count = 0;
+    //counting the number of  times open is close and
+    for (j = 0; j < this.temp['data'].length; j++) {
+      var open = this.temp['data'][0]['open'];
+      var close = this.temp['data'][0]['close'];
+      if (open < close) {
+        count++;
+      } else {
+        count--;
+      }
+    }
+    //array to be pushed to buy or sell for the ticker and final call
+    var array = [this.tickers[i], 0];
+    var bias;
+    //checks the count of the prices and sees where the trend is going.
+    if (count > 0) {
+      bias = 1;
+    } else if (count < 0) {
+      bias = 3;
+    } else {
+      bias = 0;
+    }
+    if (this.count[i] > -1) {
+      console.log(p);
+      console.log(bias);
+      if (p < bias) {
+        array[1] = 1;
+      } else if (v < bias && p < bias) {
+        array[1] = 0;
+      } else if (v < bias && p > bias) {
+        array[1] = 0;
+      } else if (v > bias && p < bias) {
+        array[1] = 1;
+      }
+    } else {
+      console.log(p);
+      console.log(m);
+      array[1] = 0;
+    }
+
+    buyorsell.push(array);
+    this.buyorsell = buyorsell;
   }
   getbuyorsell() {
     var buyorsell = [];
@@ -299,6 +413,7 @@ export class ProductListComponent {
           if (high > maxhigh) {
             maxhigh = high;
           }
+          0;
           if (low < minlow) {
             minlow = low;
           }
