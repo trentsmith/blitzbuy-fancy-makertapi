@@ -226,6 +226,24 @@ export class ProductListComponent {
   NN: any[];
   temp1: any[];
   buyorsell: any[];
+  getbuyorsellnew() {
+    var buyorsell = [];
+    var today = this.currentDate(0);
+    var firstday = this.currentDate(10);
+    var url1 =
+      'https://api.marketstack.com/v1/eod?access_key=6158cebbbad397e037e6807f887a3a67&symbols=' +
+      this.tickers[i] +
+      '&date_from=2023-03-26&date_to=2023-03-30';
+    //note this one will fix it.
+    this.http.get(url1).subscribe((data: any[]) => {
+      this.temp = data;
+    });
+
+    var minlow = this.temp['data'][0]['low'];
+    var maxvolume = this.temp['data'][0]['volume'];
+    var minvolume = this.temp['data'][0]['volume'];
+    for (var i = 0; i < this.tickers.length; i++) {}
+  }
   getbuyorsell() {
     var buyorsell = [];
     this.count = [];
