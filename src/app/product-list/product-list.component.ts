@@ -230,13 +230,13 @@ export class ProductListComponent {
     var buyorsell = [];
     var today = this.getDate(0);
     var firstdayoffset = this.getDate(10);
-    var url1 =
+    /*var url1 =
       'https://api.marketstack.com/v1/eod?access_key=6158cebbbad397e037e6807f887a3a67&symbols=' +
       this.tickers[i] +
       '&date_from=' +
       firstdayoffset +
       '&date_to=' +
-      today;
+      today;*/
     //note this one will fix it.
     this.http.get(url1).subscribe((data: any[]) => {
       this.temp = data;
@@ -248,6 +248,22 @@ export class ProductListComponent {
     //loops through tickers
     for (var i = 0; i < this.tickers.length; i++) {
       //loops through the days
+      var url1;
+      /*var url1 =
+      'https://api.marketstack.com/v1/eod?access_key=6158cebbbad397e037e6807f887a3a67&symbols=' +
+      this.tickers[i] +
+      '&date_from=' +
+      firstdayoffset +
+      '&date_to=' +
+      today;*/
+      //note this one will fix it.
+      this.http.get(url1).subscribe((data: any[]) => {
+        this.temp = data;
+      });
+      var maxhigh = this.temp['data'][0]['high'];
+      var minlow = this.temp['data'][0]['low'];
+      var maxvolume = this.temp['data'][0]['volume'];
+      var minvolume = this.temp['data'][0]['volume'];
       for (var j = 0; j < this.temp['data'].length; j++) {
         var high = this.temp['data'][j]['high'];
         var low = this.temp['data'][j]['low'];
@@ -359,212 +375,6 @@ export class ProductListComponent {
     }
 
     buyorsell.push(array);
-    this.buyorsell = buyorsell;
-  }
-  getbuyorsell() {
-    var buyorsell = [];
-    this.count = [];
-    //checks the tickers list
-    for (var i = 0; i < this.tickers.length; i++) {
-      var trycatch = 0;
-      this.count.push(0);
-      var url1 =
-        'https://api.marketstack.com/v1/eod?access_key=6158cebbbad397e037e6807f887a3a67&symbols=' +
-        this.tickers[i] +
-        '&date_from=2023-03-26&date_to=2023-03-30';
-      //note this one will fix it.
-      var offsetdate = 1;
-      this.http.get(url1).subscribe((data: any[]) => {
-        this.temp = data;
-      });
-      var maxhigh = 0;
-      try {
-        var offsetdate = 1;
-
-        this.getDate(offsetdate);
-
-        var minlow =
-          this.temp['Time Series (Daily)'][this.currentDate]['3. low'];
-        var maxvolume =
-          this.temp['Time Series (Daily)'][this.currentDate]['5. volume'];
-        var minvolume =
-          this.temp['Time Series (Daily)'][this.currentDate]['5. volume'];
-      } catch {
-        var offsetdate = 3;
-
-        this.getDate(offsetdate);
-
-        var minlow =
-          this.temp['Time Series (Daily)'][this.currentDate]['3. low'];
-        var maxvolume =
-          this.temp['Time Series (Daily)'][this.currentDate]['5. volume'];
-        var minvolume =
-          this.temp['Time Series (Daily)'][this.currentDate]['5. volume'];
-      }
-      //check for the values to base them off of volume
-      for (var j = 10; j > 2; j--) {
-        try {
-          this.getDate(j + 4);
-          var high =
-            this.temp['Time Series (Daily)'][this.currentDate]['2. high'];
-          var low =
-            this.temp['Time Series (Daily)'][this.currentDate]['3. low'];
-          console.log('low is ' + low);
-          var volume =
-            this.temp['Time Series (Daily)'][this.currentDate]['5. volume'];
-
-          if (high > maxhigh) {
-            maxhigh = high;
-          }
-          0;
-          if (low < minlow) {
-            minlow = low;
-          }
-          if (volume > maxvolume) {
-            maxvolume = volume;
-          }
-          if (volume < minvolume) {
-            minvolume = volume;
-          }
-          //note to calculate percentage
-        } catch (err) {
-          //console.log(this.currentDate.toString()+"failed");
-        }
-      }
-      //calculations high price and volume
-      var hml = maxhigh - minlow;
-      var hvl = maxvolume - minvolume;
-      //array of the prices for references
-      var lowhighprice = [
-        minlow,
-        minlow + hml * 0.25,
-        minlow + hml * 0.5,
-        minlow + hml * 0.75,
-        maxhigh,
-      ];
-      var lowhighvolume = [
-        minvolume,
-        minvolume + hvl * 0.25,
-        minvolume + hvl * 0.5,
-        minvolume + hvl * 0.75,
-        maxvolume,
-      ];
-
-      //change from p
-
-      var l = 1;
-      //offset of the days
-      var offset = 0;
-      //change from p
-
-      while (!l) {
-        this.getDate(offset);
-        //tests to see if it past today and into tomorrow which dne
-        try {
-          var open =
-            this.temp['Time Series (Daily)'][this.currentDate]['1. open'];
-          var close =
-            this.temp['Time Series (Daily)'][this.currentDate]['4. close'];
-          var volume1 =
-            this.temp['Time Series (Daily)'][this.currentDate]['5. volume'];
-          //change from p
-          l = 0;
-        } catch (err) {
-          offset++;
-
-          //change from p
-          l = 1;
-        }
-      }
-      //double check this function the open is giving problems double check tuesday.
-      var p;
-      var v;
-      this.getDate(offsetdate);
-      open = this.temp['Time Series (Daily)'][this.currentDate]['1. open'];
-      for (var m = 0; m < lowhighprice.length - 1; m++) {
-        console.log(m + ' ' + lowhighprice[m]);
-        console.log(open);
-        if (lowhighvolume[m] < volume1) {
-          if (m == 0) {
-            v = m;
-          }
-          if (lowhighvolume[m + 1] >= volume1) {
-            v = m;
-          }
-          if (lowhighvolume[m + 1] < volume1) {
-            v = 100;
-          }
-        }
-        if (lowhighprice[m] < open) {
-          console.log(lowhighprice);
-          console.log(open);
-          if (m == 0) {
-            p = m;
-          }
-          if (lowhighprice[m + 1] >= open) {
-            p = m;
-          }
-          if (lowhighprice[m + 1] < open) {
-            p = 100;
-          }
-        }
-      }
-
-      var array = [this.tickers[i], 0];
-
-      array[1] = 0;
-      var count = 0;
-      for (var k = 10; k > 2; k--) {
-        try {
-          this.getDate(k);
-          var open =
-            this.temp['Time Series (Daily)'][this.currentDate]['1. open'];
-          var close =
-            this.temp['Time Series (Daily)'][this.currentDate]['4. close'];
-          var volume1 =
-            this.temp['Time Series (Daily)'][this.currentDate]['5. volume'];
-          console.log(
-            'open is ' +
-              open +
-              ' ' +
-              close +
-              ' ' +
-              volume1 +
-              ' ' +
-              this.currentDate +
-              ' ' +
-              this.count[i]
-          );
-          console.log(this.count + ' ' + i);
-          if (open < close) {
-            this.count[i]++;
-          } else {
-            this.count[i]--;
-          }
-        } catch (err) {
-          //console.log(this.currentDate.toString()+"failed");
-        }
-        var bias = 1;
-      }
-      if (this.count[i] > -1) {
-        console.log(p);
-        console.log(bias);
-        if (p < bias) {
-          array[1] = 1;
-        } else if (v < bias && p < bias) {
-          array[1] = 0;
-        } else if (v < bias && p > bias) {
-          array[1] = 0;
-        } else if (v > bias && p < bias) {
-          array[1] = 1;
-        }
-      } else {
-        console.log(p);
-        console.log(m);
-        array[1] = 0;
-      }
-      buyorsell.push(array);
-    }
     this.buyorsell = buyorsell;
   }
   info: any[];
