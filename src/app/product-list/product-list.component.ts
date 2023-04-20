@@ -247,7 +247,6 @@ export class ProductListComponent {
       console.log('dates are ' + today);
       console.log('dates are ' + firstdayoffset);
       //loops through the days
-      this.count = [];
       var url1 =
         'https://api.marketstack.com/v1/eod?access_key=6158cebbbad397e037e6807f887a3a67&symbols=' +
         this.tickers[i] +
@@ -376,7 +375,7 @@ export class ProductListComponent {
       } else {
         console.log(p);
         console.log(m);
-        array[1] = 0;
+        array[1] = 1;
       }
       buyorsell.push(array);
     }
@@ -523,7 +522,41 @@ export class ProductListComponent {
       this.tickerssectors[count] = ['C', 'MS', 'BAC'];
     }
     console.log(this.tickerssectors[count]);
-    console.log(this.test[count]);
+    console.log('the test array is' + this.test[count]);
+    var today = this.getDate(0);
+    var firstdayoffset = this.getDate(10);
+    for (var i = 0; i < this.tickerssectors.length; i++) {
+      var url1 =
+        'https://api.marketstack.com/v1/eod?access_key=6158cebbbad397e037e6807f887a3a67&symbols=' +
+        this.tickerssectors[i] +
+        '&date_from=' +
+        firstdayoffset +
+        '&date_to=' +
+        today;
+      /*var url1 =
+    'https://api.marketstack.com/v1/eod?access_key=6158cebbbad397e037e6807f887a3a67&symbols=' +
+    this.tickers[i] +
+    '&date_from=' +
+    firstdayoffset +
+    '&date_to=' +
+    today;*/
+      //note this one will fix it.
+      this.http.get(url1).subscribe((data: any[]) => {
+        this.temp = data;
+      });
+      console.log(this.temp);
+      //counting the number of  times open is close and
+      for (var j = 0; j < this.temp['data'].length; j++) {
+        var open = this.temp['data'][j]['open'];
+        var close = this.temp['data'][j]['close'];
+        if (open < close) {
+          this.count[i]++;
+        } else {
+          this.count[i]--;
+        }
+      }
+    }
+    console.log('The counts are ' + this.count);
   }
   password: string;
   username: string;
