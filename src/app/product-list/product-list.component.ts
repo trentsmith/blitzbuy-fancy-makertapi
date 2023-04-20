@@ -128,14 +128,14 @@ export class ProductListComponent {
   percentaverage: any;
   priceaverage: any[];
   test = [];
-  count: any[];
+  count: any[] = [];
   getVolume() {
     this.volumeaverage = [];
-    this.count = [];
+    //this.count = [];
     this.volume = [];
     //gets data for the tickers and put them in an array
     for (var i = 0; i < this.tickers.length; i++) {
-      this.count.push(0);
+      //this.count.push(0);
       //gets data for an individual ticker
       var url1 =
         'https://api.marketstack.com/v1/eod?access_key=6158cebbbad397e037e6807f887a3a67&symbols=' +
@@ -385,7 +385,6 @@ export class ProductListComponent {
   }
 
   info: any[];
-  count = [];
   gettickersymbols() {
     this.info = [];
     this.tickers.push(this.stock);
@@ -546,13 +545,24 @@ export class ProductListComponent {
       });
       console.log(this.temp);
       //counting the number of  times open is close and
+      console.log('the tickers are ' + this.tickers);
+      var counttemp = [];
+      for (var k = 0; k < this.count.length; k++) {
+        if (!Number.isNaN(this.count[k])) {
+          counttemp.push(this.count[k]);
+        }
+      }
+      this.count = counttemp;
+      console.log(this.count);
+      console.log(counttemp);
       for (var j = 0; j < this.temp['data'].length; j++) {
         var open = this.temp['data'][j]['open'];
         var close = this.temp['data'][j]['close'];
+
         if (open < close) {
-          this.count[i]++;
+          this.count[i] = this.count[i] + 1;
         } else {
-          this.count[i]--;
+          this.count[i] = this.count[i] - 1;
         }
       }
     }
