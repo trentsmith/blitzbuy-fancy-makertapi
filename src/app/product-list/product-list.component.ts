@@ -377,9 +377,9 @@ export class ProductListComponent {
         console.log(m);
         array[1] = 0;
       }
+      buyorsell.push(array);
     }
-    console.log('array is ' + array);
-    buyorsell.push(array);
+    console.log('array is ' + this.buyorsell);
     this.buyorsell = buyorsell;
   }
 
