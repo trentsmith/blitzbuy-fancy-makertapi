@@ -247,6 +247,7 @@ export class ProductListComponent {
       console.log('dates are ' + today);
       console.log('dates are ' + firstdayoffset);
       //loops through the days
+      this.count = [];
       var url1 =
         'https://api.marketstack.com/v1/eod?access_key=6158cebbbad397e037e6807f887a3a67&symbols=' +
         this.tickers[i] +
@@ -310,6 +311,7 @@ export class ProductListComponent {
     for (j = 0; j < this.temp['data'].length; j++) {
       var open = this.temp['data'][j]['open'];
       var volume1 = this.temp['data'][j]['volume'];
+      var count = 0;
       for (var m = 0; m < lowhighprice.length - 1; m++) {
         console.log(m + ' ' + lowhighprice[m]);
         console.log(open);
@@ -334,7 +336,6 @@ export class ProductListComponent {
           }
         }
 
-        var count = 0;
         //counting the number of  times open is close and
         var open = this.temp['data'][j]['open'];
         var close = this.temp['data'][j]['close'];
@@ -379,7 +380,8 @@ export class ProductListComponent {
       }
       buyorsell.push(array);
     }
-    console.log('array is ' + this.buyorsell);
+    console.log(this.count);
+    console.log('array is ' + array);
     this.buyorsell = buyorsell;
   }
 
