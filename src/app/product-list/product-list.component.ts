@@ -238,6 +238,7 @@ export class ProductListComponent {
       '&date_to=' +
       today;*/
     //note this one will fix it.
+
     this.http.get(url1).subscribe((data: any[]) => {
       this.temp = data;
     });
@@ -248,8 +249,10 @@ export class ProductListComponent {
     //loops through tickers
     for (var i = 0; i < this.tickers.length; i++) {
       //loops through the days
-      var url1;
-      /*var url1 =
+      var url1 =
+        'https://api.marketstack.com/v1/eod?access_key=6158cebbbad397e037e6807f887a3a67&symbols=' +
+        this.tickers[i] +
+        '&date_from=2023-03-26&date_to=2023-03-30'; /*var url1 =
       'https://api.marketstack.com/v1/eod?access_key=6158cebbbad397e037e6807f887a3a67&symbols=' +
       this.tickers[i] +
       '&date_from=' +
