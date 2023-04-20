@@ -115,7 +115,8 @@ export class ProductListComponent {
     m.length == 1 && (m = '0' + m);
     var yyyymmdd = y + '-' + m + '-' + d;
     console.log(yyyymmdd);
-    this.currentDate = yyyymmdd;
+    //this.currentDate = yyyymmdd;
+    return yyyymmdd;
   }
 
   stockhistory: any[];
@@ -239,20 +240,21 @@ export class ProductListComponent {
       today;*/
     //note this one will fix it.
 
-    this.http.get(url1).subscribe((data: any[]) => {
-      this.temp = data;
-    });
-    var maxhigh = this.temp['data'][0]['high'];
-    var minlow = this.temp['data'][0]['low'];
-    var maxvolume = this.temp['data'][0]['volume'];
-    var minvolume = this.temp['data'][0]['volume'];
-    //loops through tickers
+    //loops through tickers]
+    var p = [];
+    var v = [];
     for (var i = 0; i < this.tickers.length; i++) {
+      console.log('dates are ' + today);
+      console.log('dates are ' + firstdayoffset);
       //loops through the days
       var url1 =
         'https://api.marketstack.com/v1/eod?access_key=6158cebbbad397e037e6807f887a3a67&symbols=' +
         this.tickers[i] +
-        '&date_from=2023-03-26&date_to=2023-03-30'; /*var url1 =
+        '&date_from=' +
+        firstdayoffset +
+        '&date_to=' +
+        today;
+      /*var url1 =
       'https://api.marketstack.com/v1/eod?access_key=6158cebbbad397e037e6807f887a3a67&symbols=' +
       this.tickers[i] +
       '&date_from=' +
@@ -305,81 +307,82 @@ export class ProductListComponent {
       ];
     }
 
-    var p;
-    var v;
-    var open = this.temp['data'][0]['open'];
-    var volume1 = this.temp['data'][0]['volume'];
-    for (var m = 0; m < lowhighprice.length - 1; m++) {
-      console.log(m + ' ' + lowhighprice[m]);
-      console.log(open);
-      if (lowhighvolume[m] < volume1) {
-        if (m == 0) {
-          v = m;
-        }
-        if (lowhighvolume[m + 1] >= volume1) {
-          v = m;
-        }
-        if (lowhighvolume[m + 1] < volume1) {
-          v = 100;
-        }
-      }
-      if (lowhighprice[m] < open) {
-        console.log(lowhighprice);
-        console.log(open);
-        if (m == 0) {
-          p = m;
-        }
-        if (lowhighprice[m + 1] >= open) {
-          p = m;
-        }
-        if (lowhighprice[m + 1] < open) {
-          p = 100;
-        }
-      }
-    }
-    var count = 0;
-    //counting the number of  times open is close and
     for (j = 0; j < this.temp['data'].length; j++) {
-      var open = this.temp['data'][0]['open'];
-      var close = this.temp['data'][0]['close'];
-      if (open < close) {
-        count++;
-      } else {
-        count--;
-      }
-    }
-    //array to be pushed to buy or sell for the ticker and final call
-    var array = [this.tickers[i], 0];
-    var bias;
-    //checks the count of the prices and sees where the trend is going.
-    if (count > 0) {
-      bias = 1;
-    } else if (count < 0) {
-      bias = 3;
-    } else {
-      bias = 0;
-    }
-    if (this.count[i] > -1) {
-      console.log(p);
-      console.log(bias);
-      if (p < bias) {
-        array[1] = 1;
-      } else if (v < bias && p < bias) {
-        array[1] = 0;
-      } else if (v < bias && p > bias) {
-        array[1] = 0;
-      } else if (v > bias && p < bias) {
-        array[1] = 1;
-      }
-    } else {
-      console.log(p);
-      console.log(m);
-      array[1] = 0;
-    }
+      var open = this.temp['data'][j]['open'];
+      var volume1 = this.temp['data'][j]['volume'];
+      for (var m = 0; m < lowhighprice.length - 1; m++) {
+        console.log(m + ' ' + lowhighprice[m]);
+        console.log(open);
+        if (lowhighvolume[m] < volume1) {
+          if (m == 0) {
+            v.push(m);
+          } else if (lowhighvolume[m + 1] >= volume1) {
+            v.push(m);
+          } else if (lowhighvolume[m + 1] < volume1) {
+            v.push(100);
+          }
+        }
+        if (lowhighprice[m] < open) {
+          console.log(lowhighprice);
+          console.log(open);
+          if (m == 0) {
+            p.push(m);
+          } else if (lowhighprice[m + 1] >= open) {
+            p.push(m);
+          } else if (lowhighprice[m + 1] < open) {
+            p.push(100);
+          }
+        }
 
+        var count = 0;
+        //counting the number of  times open is close and
+        var open = this.temp['data'][j]['open'];
+        var close = this.temp['data'][j]['close'];
+        if (open < close) {
+          count++;
+        } else {
+          count--;
+        }
+      }
+    }
+    console.log(p);
+    console.log(v);
+
+    //array to be pushed to buy or sell for the ticker and final call
+    for (var i = 0; i < this.tickers.length; i++) {
+      var array = [this.tickers[i], 0];
+      var bias;
+      //checks the count of the prices and sees where the trend is going.
+      if (count > 0) {
+        bias = 1;
+      } else if (count < 0) {
+        bias = 3;
+      } else {
+        bias = 0;
+      }
+      if (this.count[i] > -1) {
+        console.log(p);
+        console.log('bias is' + bias);
+        if (p[i] < bias) {
+          array[1] = 1;
+        } else if (v[i] < bias && p[i] < bias) {
+          array[1] = 0;
+        } else if (v[i] < bias && p[i] > bias) {
+          array[1] = 0;
+        } else if (v[i] > bias && p[i] < bias) {
+          array[1] = 1;
+        }
+      } else {
+        console.log(p);
+        console.log(m);
+        array[1] = 0;
+      }
+    }
+    console.log('array is ' + array);
     buyorsell.push(array);
     this.buyorsell = buyorsell;
   }
+
   info: any[];
   count = [];
   gettickersymbols() {
