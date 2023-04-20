@@ -228,8 +228,8 @@ export class ProductListComponent {
   buyorsell: any[];
   getbuyorsellnew() {
     var buyorsell = [];
-    var today = this.currentDate(0);
-    var firstdayoffset = this.currentDate(10);
+    var today = this.getDate(0);
+    var firstdayoffset = this.getDate(10);
     var url1 =
       'https://api.marketstack.com/v1/eod?access_key=6158cebbbad397e037e6807f887a3a67&symbols=' +
       this.tickers[i] +
