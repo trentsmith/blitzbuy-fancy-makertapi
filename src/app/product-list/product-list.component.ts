@@ -464,6 +464,8 @@ export class ProductListComponent {
     console.log(ticker);
     //if(this.tickers.length == this.tickerssectors.length)
     //{
+    this.tickerssectors = [];
+    var sarray: any[];
     for (var i = 0; i < this.tickers.length; i++) {
       if (ticker == this.tickers[i]) {
         var count = i;
@@ -488,46 +490,77 @@ export class ProductListComponent {
         'AAGC',
         'HYII',
       ];
+      sarray = [
+        'ADKIL',
+        'ABENU',
+        'ADTC',
+        'ASIX',
+        'AFML',
+        'AFYG',
+        'AGGL',
+        'APD',
+        'ASKE',
+        'ALB',
+        'AA',
+        'ACNE',
+        'ALKN',
+        'AAGC',
+        'HYII',
+      ];
     }
     if (this.test[count] == 'Telecom') {
       this.tickerssectors[count] = ['S', 'CCOI', 'VZ', 'T', 'BCE']; //["F","GOOG"];
+      sarray = ['S', 'CCOI', 'VZ', 'T', 'BCE'];
     }
 
     if (this.test[count] == 'Consumer Staples') {
       this.tickerssectors[count] = ['TGT', 'KR', 'CLX']; //["F","GOOG"];
+      sarray = ['TGT', 'KR', 'CLX']; //["F","GOOG"];;
     }
     if (this.test[count] == 'Consumer Discretionary' || this.test[count] == 0) {
       this.tickerssectors[count] = ['NKE', 'SBUX', 'MCD', 'TJX', 'BKNG']; //["F","GOOG"];
+      sarray = ['NKE', 'SBUX', 'MCD', 'TJX', 'BKNG'];
     }
     if (this.test[count] == 'Utilities' || this.test[count] == 0) {
       this.tickerssectors[count] = ['PPL', 'AWK', 'AES', 'NEE']; //["F","GOOG"];
+      sarray = ['PPL', 'AWK', 'AES', 'NEE'];
     }
     if (this.test[count] == 'Tech' || this.test[count] == 0) {
       this.tickerssectors[count] = ['MSFT', 'GOOG', 'F']; //["F","GOOG"];
+      sarray = ['MSFT', 'GOOG', 'F'];
     }
     if (this.test[count] == 'Energy') {
       this.tickerssectors[count] = ['ENPH'];
+      sarray = ['ENPH'];
     }
     if (this.test[count] == 'Healthcare') {
       this.tickerssectors[count] = ['ISRG', 'VRTX', 'ABBV'];
+      sarray = ['ISRG', 'VRTX', 'ABBV'];
     }
     if (this.test[count] == 'Industrials') {
       this.tickerssectors[count] = ['GE', 'CAT', 'HON'];
+      sarray = ['GE', 'CAT', 'HON'];
     }
     if (this.test[count] == 'Real Estate') {
       this.tickerssectors[count] = ['AMT', 'PSA', 'FFO'];
+      sarray = ['AMT', 'PSA', 'FFO'];
     }
     if (this.test[count] == 'Financials') {
       this.tickerssectors[count] = ['C', 'MS', 'BAC'];
+      sarray = ['C', 'MS', 'BAC'];
     }
     console.log(this.tickerssectors[count]);
     console.log('the test array is' + this.test[count]);
     var today = this.getDate(0);
     var firstdayoffset = this.getDate(10);
-    for (var i = 0; i < this.tickerssectors.length; i++) {
+    for (var i = 0; i < sarray.length; i++) {
+      console.log('sarray is ' + sarray[i]);
+      // for (var l = 0; l < this.tickerssectors.length; l++) {
+      console.log(this.tickerssectors[count]);
+
       var url1 =
         'https://api.marketstack.com/v1/eod?access_key=6158cebbbad397e037e6807f887a3a67&symbols=' +
-        this.tickerssectors[i] +
+        sarray[i] +
         '&date_from=' +
         firstdayoffset +
         '&date_to=' +
@@ -544,28 +577,26 @@ export class ProductListComponent {
         this.temp = data;
       });
       console.log(this.temp);
-      //counting the number of  times open is close and
       console.log('the tickers are ' + this.tickers);
       var counttemp = [];
-      for (var k = 0; k < this.count.length; k++) {
-        if (!Number.isNaN(this.count[k])) {
-          counttemp.push(this.count[k]);
-        }
-      }
       this.count = counttemp;
       console.log(this.count);
       console.log(counttemp);
+      this.count[count] = 0;
       for (var j = 0; j < this.temp['data'].length; j++) {
         var open = this.temp['data'][j]['open'];
         var close = this.temp['data'][j]['close'];
-
+        console.log('counting counts');
+        console.log(this.count);
+        console.log(count);
         if (open < close) {
-          this.count[i] = this.count[i] + 1;
+          this.count[count] = this.count[count] + 1;
         } else {
-          this.count[i] = this.count[i] - 1;
+          this.count[count] = this.count[count] - 1;
         }
       }
     }
+
     console.log('The counts are ' + this.count);
   }
   password: string;
