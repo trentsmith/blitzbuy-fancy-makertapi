@@ -14,7 +14,7 @@ export class ProductListComponent {
   name = 'Angular';
   constructor(private http: HttpClient) {
     var url1 =
-      'https://api.marketstack.com/v1/eod?access_key=6158cebbbad397e037e6807f887a3a67&symbols=T&date_from=2023-03-26&date_to=2023-03-30';
+      'https://api.marketstack.com/v1/eod?access_key=27da2da60bc4eecb62e22be17aae1c0e&symbols=T&date_from=2023-03-26&date_to=2023-03-30';
 
     this.http.get(url1).subscribe((data: any[]) => {
       this.temp = data;
@@ -22,7 +22,7 @@ export class ProductListComponent {
   }
   title = 'project';
   url =
-    'http://api.marketstack.com/v1/eod?access_key=6158cebbbad397e037e6807f887a3a67&symbols=T&date_from=2023-03-26&date_to=2023-03-30';
+    'https://api.marketstack.com/v1/eod?access_key=27da2da60bc4eecb62e22be17aae1c0e&symbols=T&date_from=2023-03-26&date_to=2023-03-30';
   //'https://api.worldtradingdata.com/api/v1/stock?symbol=SNAP,TWTR,VOD.L&api_token=PRt07UGBzUrZPTUROLww1CBKxFeS0OcWL7qB3oaaJKxeFJ1mWuhz7LI08qBF';
   data: any[];
   stock: any;
@@ -138,7 +138,7 @@ export class ProductListComponent {
       //this.count.push(0);
       //gets data for an individual ticker
       var url1 =
-        'https://api.marketstack.com/v1/eod?access_key=6158cebbbad397e037e6807f887a3a67&symbols=' +
+        'https://api.marketstack.com/v1/eod?access_key=27da2da60bc4eecb62e22be17aae1c0e&symbols=' +
         this.tickers[i] +
         '&date_from=2023-03-26&date_to=2023-03-30';
 
@@ -183,7 +183,7 @@ export class ProductListComponent {
       this.priceaverage.push(0);
       //gets data from the url for the ticker
       var url1 =
-        'https://api.marketstack.com/v1/eod?access_key=6158cebbbad397e037e6807f887a3a67&symbols=' +
+        'https://api.marketstack.com/v1/eod?access_key=27da2da60bc4eecb62e22be17aae1c0e&symbols=' +
         this.tickers[i] +
         '&date_from=2023-03-26&date_to=2023-03-30';
 
@@ -248,7 +248,7 @@ export class ProductListComponent {
       console.log('dates are ' + firstdayoffset);
       //loops through the days
       var url1 =
-        'https://api.marketstack.com/v1/eod?access_key=6158cebbbad397e037e6807f887a3a67&symbols=' +
+        'https://api.marketstack.com/v1/eod?access_key=27da2da60bc4eecb62e22be17aae1c0e&symbols=' +
         this.tickers[i] +
         '&date_from=' +
         firstdayoffset +
@@ -559,7 +559,7 @@ export class ProductListComponent {
       console.log(this.tickerssectors[count]);
 
       var url1 =
-        'https://api.marketstack.com/v1/eod?access_key=6158cebbbad397e037e6807f887a3a67&symbols=' +
+        'https://api.marketstack.com/v1/eod?access_key=27da2da60bc4eecb62e22be17aae1c0e&symbols=' +
         sarray[i] +
         '&date_from=' +
         firstdayoffset +
@@ -691,15 +691,6 @@ export class ProductListComponent {
     });
 
     console.log('the url data is ' + this.data1);
-    if (
-      this.data1[0].username != undefined &&
-      this.data1[0].usename != null &&
-      this.data1[0].username != []
-    ) {
-      this.showAI = true;
-      this.show = true;
-      this.showmanuel = true;
-    }
   }
   /*getData(url: string) {
     var test;
